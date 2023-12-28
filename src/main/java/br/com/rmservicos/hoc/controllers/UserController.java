@@ -1,20 +1,15 @@
 package br.com.rmservicos.hoc.controllers;
 
 import br.com.rmservicos.hoc.converters.UserMapper;
-import br.com.rmservicos.hoc.converters.UserMapperImpl;
 import br.com.rmservicos.hoc.dto.UserDto;
 import br.com.rmservicos.hoc.entities.User;
 import br.com.rmservicos.hoc.services.UserService;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/user")
@@ -33,13 +28,21 @@ public class UserController {
         toListDto(usersDb, users);
         return ResponseEntity.ok(users);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDto> getUser(@PathVariable UUID id){
+
+        Optional<User> user =  userService.findById(id);
+        return user.map(value -> ResponseEntity.ok(userMapper.entityToUserDto(value)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
     @PostMapping()
-    public ResponseEntity<String> saveUser(@RequestBody UserDto userDto){
+    public ResponseEntity<UserDto> saveUser(@RequestBody UserDto userDto){
 
         if(!Objects.isNull(userDto) && !Objects.isNull(userDto.getName())) {
             User user = userMapper.dtoToUser(userDto);
-            userService.save(user);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
+            user = userService.save(user);
+            return ResponseEntity.ok(userMapper.entityToUserDto(user));
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }

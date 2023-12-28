@@ -6,22 +6,69 @@ import lombok.Data;
 import java.util.Date;
 import java.util.UUID;
 
-@Data
 @Entity
 @Table(name = "user")
 public class User {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy=GenerationType.UUID)
     private UUID id;
 
-    @Column(length = 100, nullable = false)
+    @Column(length = 100, nullable = false, unique = true)
     private String name;
 
-    @Column(length = 255, nullable = false)
+    @Column(length = 255, nullable = false, unique = true)
     private String email;
 
     private Date dtIncl;
     private Date dtAlter;
     private Date dtInat;
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Date getDtIncl() {
+        return dtIncl;
+    }
+
+    public void setDtIncl(Date dtIncl) {
+        this.dtIncl = dtIncl;
+    }
+
+    public Date getDtAlter() {
+        return dtAlter;
+    }
+
+    public void setDtAlter(Date dtAlter) {
+        this.dtAlter = dtAlter;
+    }
+
+    public Date getDtInat() {
+        return dtInat;
+    }
+
+    public void setDtInat(Date dtInat) {
+        this.dtInat = dtInat;
+    }
 }
