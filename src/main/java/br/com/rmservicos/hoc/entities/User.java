@@ -1,5 +1,6 @@
 package br.com.rmservicos.hoc.entities;
 
+import br.com.rmservicos.hoc.enums.UserProfile;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -23,6 +24,8 @@ public class User {
     private Date dtIncl;
     private Date dtAlter;
     private Date dtInat;
+
+    private UserProfile userProfile;
 
     public UUID getId() {
         return id;
@@ -70,5 +73,13 @@ public class User {
 
     public void setDtInat(Date dtInat) {
         this.dtInat = dtInat;
+    }
+
+    public UserProfile getUserProfile() {
+        return userProfile;
+    }
+
+    public void setUserProfile(UserProfile userProfile) {
+        this.userProfile = userProfile;
     }
 }

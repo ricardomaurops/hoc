@@ -28,4 +28,13 @@ public class UserService {
     public Optional<User> findById(UUID id) {
         return userRepository.findById(id);
     }
+
+    public User update(User user) {
+      return userRepository.save(user);
+    }
+
+    public void delete(UUID id) {
+        Optional<User> user = userRepository.findById(id);
+        user.ifPresent(value -> userRepository.delete(value));
+    }
 }

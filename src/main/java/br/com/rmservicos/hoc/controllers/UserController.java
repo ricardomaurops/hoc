@@ -48,6 +48,19 @@ public class UserController {
         }
     }
 
+    @PutMapping
+    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto) {
+        User user = userMapper.dtoToUser(userDto);
+        user = userService.update(user);
+        return ResponseEntity.ok(userMapper.entityToUserDto(user));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable UUID id){
+        userService.delete(id);
+        return ResponseEntity.ok().build();
+    }
+
     private void toListDto(List<User> usersDb, List<UserDto> users) {
         if(!usersDb.isEmpty()) {
             usersDb.forEach((user ->

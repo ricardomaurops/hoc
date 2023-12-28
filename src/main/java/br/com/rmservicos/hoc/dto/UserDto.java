@@ -1,5 +1,6 @@
 package br.com.rmservicos.hoc.dto;
 
+import br.com.rmservicos.hoc.enums.UserProfile;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +16,8 @@ public class UserDto {
     private Date dtIncl;
     private Date dtAlter;
     private Date dtInat;
+
+    private UserProfile userProfile;
 
     public UUID getId() {
         return id;
@@ -62,5 +65,13 @@ public class UserDto {
 
     public void setDtInat(Date dtInat) {
         this.dtInat = dtInat;
+    }
+
+    public UserProfile getUserProfile() {
+        return userProfile;
+    }
+
+    public void setUserProfile(UserProfile userProfile) {
+        this.userProfile = userProfile;
     }
 }
