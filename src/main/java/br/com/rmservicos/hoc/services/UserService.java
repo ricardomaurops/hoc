@@ -21,19 +21,23 @@ public class UserService {
     }
 
     public User save(User user) {
-        user.setDtIncl(new Date());
-        return userRepository.save(user);
+        if(userRepository.findByEmail(user.getEmail()) == null) {
+            user.setDtIncl(new Date());
+            return userRepository.save(user);
+        }
+       return null;
     }
 
-    public Optional<User> findById(UUID id) {
+    public Optional<User> findById(Integer id) {
         return userRepository.findById(id);
     }
 
     public User update(User user) {
-      return userRepository.save(user);
+        user.setDtAlter(new Date());
+        return userRepository.save(user);
     }
 
-    public void delete(UUID id) {
+    public void delete(Integer id) {
         Optional<User> user = userRepository.findById(id);
         user.ifPresent(value -> userRepository.delete(value));
     }

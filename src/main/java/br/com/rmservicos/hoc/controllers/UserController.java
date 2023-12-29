@@ -30,7 +30,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> getUser(@PathVariable UUID id){
+    public ResponseEntity<UserDto> getUser(@PathVariable Integer id){
 
         Optional<User> user =  userService.findById(id);
         return user.map(value -> ResponseEntity.ok(userMapper.entityToUserDto(value)))
@@ -39,7 +39,8 @@ public class UserController {
     @PostMapping()
     public ResponseEntity<UserDto> saveUser(@RequestBody UserDto userDto){
 
-        if(!Objects.isNull(userDto) && !Objects.isNull(userDto.getName())) {
+        if(!Objects.isNull(userDto) && !Objects.isNull(userDto.getName())
+                                            && !Objects.isNull(userDto.getEmail())) {
             User user = userMapper.dtoToUser(userDto);
             user = userService.save(user);
             return ResponseEntity.ok(userMapper.entityToUserDto(user));
@@ -56,7 +57,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable UUID id){
+    public ResponseEntity<String> deleteUser(@PathVariable Integer id){
         userService.delete(id);
         return ResponseEntity.ok().build();
     }
