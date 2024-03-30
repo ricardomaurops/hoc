@@ -23,9 +23,14 @@ public class UserController {
 
     @GetMapping()
     public ResponseEntity<List<UserDto>> listUsers(){
+
         List<UserDto> users = new ArrayList<UserDto>();
-        List<User> usersDb = userService.findAll();
+
+        List<User> usersDb = userService
+                .findAll();
+
         toListDto(usersDb, users);
+
         return ResponseEntity.ok(users);
     }
 
@@ -33,40 +38,58 @@ public class UserController {
     public ResponseEntity<UserDto> getUser(@PathVariable Integer id){
 
         Optional<User> user =  userService.findById(id);
-        return user.map(value -> ResponseEntity.ok(userMapper.entityToUserDto(value)))
-                .orElseGet(() -> ResponseEntity.notFound().build());
+
+        return user.map(value ->
+                        ResponseEntity
+                                .ok(userMapper.entityToUserDto(value)))
+                                .orElseGet(() -> ResponseEntity
+                                                .notFound().build());
     }
     @PostMapping()
     public ResponseEntity<UserDto> saveUser(@RequestBody UserDto userDto){
 
         if(!Objects.isNull(userDto) && !Objects.isNull(userDto.getName())
                                             && !Objects.isNull(userDto.getEmail())) {
+
             User user = userMapper.dtoToUser(userDto);
             user = userService.save(user);
-            return ResponseEntity.ok(userMapper.entityToUserDto(user));
+
+            return ResponseEntity
+                    .ok(userMapper.entityToUserDto(user));
+
         } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     @PutMapping
     public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto) {
+
         User user = userMapper.dtoToUser(userDto);
+
         user = userService.update(user);
-        return ResponseEntity.ok(userMapper.entityToUserDto(user));
+
+        return ResponseEntity
+                .ok(userMapper.entityToUserDto(user));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable Integer id){
+
         userService.delete(id);
-        return ResponseEntity.ok().build();
+
+        return ResponseEntity
+                .ok().build();
     }
 
     private void toListDto(List<User> usersDb, List<UserDto> users) {
+
         if(!usersDb.isEmpty()) {
+
             usersDb.forEach((user ->
-                    users.add(userMapper.entityToUserDto(user)
-                    )));
+                             users.add(userMapper.entityToUserDto(user)
+                            )));
         }
     }
 }

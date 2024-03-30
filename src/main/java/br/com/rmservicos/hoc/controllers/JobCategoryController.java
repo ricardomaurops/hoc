@@ -25,49 +25,81 @@ public class JobCategoryController {
 
     @GetMapping()
     public ResponseEntity<List<JobCategoryDto>> listJobCategories() {
-        List<JobCategory> jobCategoryList = jobCategoryService.findAll();
-        List<JobCategoryDto> jobCategoryDtoList = new ArrayList<JobCategoryDto>();
+
+        List<JobCategory> jobCategoryList =
+                jobCategoryService.findAll();
+
+        List<JobCategoryDto> jobCategoryDtoList
+                = new ArrayList<JobCategoryDto>();
+
         toListDto(jobCategoryList,jobCategoryDtoList);
 
         return ResponseEntity.ok(jobCategoryDtoList);
     }
     @GetMapping("/{id}")
     public ResponseEntity<JobCategoryDto> getJobCategory(@PathVariable Integer id) {
-        Optional<JobCategory> jobCategory = jobCategoryService.findById(id);
-        return jobCategory.map(value -> ResponseEntity.ok(jobCategoryMapper.entityToJobCategoryDto(value)))
-                .orElseGet(()-> ResponseEntity.notFound().build());
+
+        Optional<JobCategory> jobCategory =
+                jobCategoryService.findById(id);
+
+        return jobCategory
+                .map(value -> ResponseEntity
+                        .ok(jobCategoryMapper.entityToJobCategoryDto(value)))
+                        .orElseGet(()-> ResponseEntity.notFound().build());
+
     }
 
     @PostMapping
     public ResponseEntity<JobCategoryDto> saveJobCategory (@RequestBody JobCategoryDto jobCategoryDto) {
 
-        if(!Objects.isNull(jobCategoryDto) && !Objects.isNull(jobCategoryDto.getName())) {
-            JobCategory jobCategory = jobCategoryMapper.dtoToJobCategory(jobCategoryDto);
-            jobCategory = jobCategoryService.save(jobCategory);
-            return ResponseEntity.ok(jobCategoryMapper.entityToJobCategoryDto(jobCategory));
+        if(!Objects.isNull(jobCategoryDto)
+                && !Objects.isNull(jobCategoryDto.getName())) {
+
+            JobCategory jobCategory =
+                    jobCategoryMapper.dtoToJobCategory(jobCategoryDto);
+
+            jobCategory = jobCategoryService
+                    .save(jobCategory);
+
+            return ResponseEntity
+                    .ok(jobCategoryMapper.entityToJobCategoryDto(jobCategory));
+
         } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     @PutMapping
     public ResponseEntity<JobCategoryDto> updateJobCategory(@RequestBody JobCategoryDto jobCategoryDto) {
-        JobCategory jobCategory = jobCategoryMapper.dtoToJobCategory(jobCategoryDto);
-        jobCategory = jobCategoryService.update(jobCategory);
-        return ResponseEntity.ok(jobCategoryMapper.entityToJobCategoryDto(jobCategory));
+
+        JobCategory jobCategory = jobCategoryMapper
+                .dtoToJobCategory(jobCategoryDto);
+
+        jobCategory = jobCategoryService
+                .update(jobCategory);
+
+        return ResponseEntity
+                .ok(jobCategoryMapper.entityToJobCategoryDto(jobCategory));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteJobCategory(@PathVariable Integer id) {
-        jobCategoryService.delete(id);
+
+        jobCategoryService
+                .delete(id);
+
         return ResponseEntity.ok().build();
     }
 
     private void toListDto(List<JobCategory> categoryDb, List<JobCategoryDto> categories) {
+
         if(!categoryDb.isEmpty()) {
+
             categoryDb.forEach((category ->
-                    categories.add(jobCategoryMapper.entityToJobCategoryDto(category)
-                    )));
+                                categories
+                                        .add(jobCategoryMapper.entityToJobCategoryDto(category)
+                                )));
         }
     }
 }
